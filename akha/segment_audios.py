@@ -1,0 +1,29 @@
+from pydub import AudioSegment
+import os
+import pandas as pd
+import librosa
+import soundfile as sf
+
+
+data_path = 'akha.csv'
+df = pd.read_csv(data_path)
+
+segment_names =df['segment_name'].tolist()
+start_times = df['start'].tolist()
+end_times = df['end'].tolist()
+
+input_file= '1.mp3'
+speech, rate = librosa.load(input_file)
+for x in range(len(segment_names)):
+  file_name = segment_names[x]
+  start_second = int(start_times[x] * rate)
+  end_second = int(end_times[x] * rate)
+  current_segment = speech[start_second:end_second]
+  print(f"Segment {x+1} duration: {len(current_segment) / rate} seconds")
+  segment_path = 'audio_segments/' + str(file_name) + '.wav'
+  sf.write(segment_path, current_segment, rate)
+
+path = 'audio_segments/' + str(df['file_name'][0]) + '.wav'
+sf.write(path, speech, rate)
+
+# ['ENYOU COUGH ALL JUDAHAR BENUMBEN THOMAS OWNER THE LITTLE JOUDAL A LITTLE HOW ZELONG HALL', 'FRCALLOUIS JEAN LUI ALLER LA LAMUE ALI AMINA DE AMINA DEUX ALLI NA SHOW', 'ENNACHO ALI SHALAMY LAHA UNED THE LITTLE SALAMO ABY BOZA NOTÁ UNDER THE BOSAL AUDDER', 'ENYOU SHOULD ONLY SOME PART OF BEING THE GOBILE AT THE SOLUBLE SULABLE ABOUT', 'FROULIA FOUSA IL MET SOLA MOT À LIT LE HOBAND LES HOBBES ALLÍ ARBI', 'ENA BIOALLY AS HOW AS HOW A LITTLE HOSH HAPPER GIHOSE A POWER A LI', 'ENA CALLED EARLY HIS HEART HIS HEART EARLY MONOSIE MONOSIEURLY', 'PTAMOU A LIVO SHI', 'ENCHEWZAR YECOMBE A HAMMY NO MAN WHO ARE IS OILAND TO HER THE BABULANY OR BE', 'ENTHE CONVILLE ARE YOUR MOCONY AND CALL YOU TO ME DO BULLOW ME CORPING', 'ENHOW ARE YOUR BETTER THE TOWN CLEAR TO YOUR HIM WHERE HE COMMUTE ONLY', 'FRCHARTILA CHATILA ALLEZ ZENUBA DE LA SE LUBA BELAND ALLER À BIOUX', 'FRPIRE AUX ALLÉS ÉLICONS ELLE COMMENT ALLÉE À SOUR EN SOUR À LES ZADO', 'PTZADÓ ALLÉ ACHOUND ACHOU ALER ELE O ELE O ALI ELA LAZAR', 'ENIT WAS ALL ALI BAKAR', 'ENWOULD BE THE CARLOS YOUNG COULD MET TURCH MY PUNSIE ON THE CANYON COULDNT CITY MET THE CHANGED', 'FRQUAND IL UM AMBAMNA MON SHOW YOU SOMMIER BEDARME ZARTELLER DE KO UHA JOHAR JOS', 'PTA QUE O GÓGÁGOU LEOR HUBUA E OBENDO A PIRAMIO SÃO VALEON CHOGO QUATRADUCIA AIULACE', 'PTO CHÃO É SOM MINHA PADANNA É MER AO ALETE LICITÉ A LINCOLÍO USУЛЯНО МИЛАНА UM ELAGRAMA', 'ENA YOUR CHAIR OF THE RAW BURL OF HUECO FOR DOMIRD THE OUT', 'ENPAPA MILLION ARE YOU GOED TO THE DOOR SO HARD OR WHO ARE TRAILED AT YOUR LANE', 'ESYO EL LET LECHE DE AL DICUNEO Y MANULA LE NOTIA']
